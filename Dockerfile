@@ -21,4 +21,5 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
-CMD gunicorn app:app --bind 0.0.0.0:$PORT --timeout 300 --worker-class gevent --workers 2
+ENV MALLOC_ARENA_MAX=2
+CMD ["sh", "-c", "exec gunicorn app:app --bind 0.0.0.0:${PORT:-8000} --timeout 300 --worker-class gevent --workers 1 --max-requests 50 --max-requests-jitter 10"]
